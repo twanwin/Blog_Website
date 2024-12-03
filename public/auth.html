@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Signup - Health & Wellness Blog</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        #strengthBar {
+            width: 0;
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        .password-strength {
+            margin-top: 10px;
+        }
+        
+        .password-match {
+            color: #4CAF50;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .password-mismatch {
+            color: #DC3545;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="site-title">Health & Wellness Blog</a>
+
+            <nav class="nav-links">
+                <a href="/about.html">About</a>
+                <a href="/contact.html">Contact</a>
+                <a href="/faq.html">FAQ</a>
+                <a href="/privacy.html">Privacy Policy</a>
+            </nav>
+
+            <div class="nav-buttons">
+                <a href="/auth.html" class="button secondary">Login</a>
+                <a href="/auth.html" class="button primary">Sign Up</a>
+            </div>
+        </header>
+
+        <div id="authForms" class="content-card">
+            <section class="section form-section">
+                <h2>Sign Up</h2>
+                
+                <div class="validation-rules">
+                    <p>Password must contain:</p>
+                    <ul>
+                        <li>At least 6 characters</li>
+                        <li>At least one number</li>
+                        <li>At least one special character</li>
+                        <li>At least one uppercase letter</li>
+                    </ul>
+                </div>
+
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                        <div id="firstNameError" class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" name="email" required>
+                        <div id="signupEmailError" class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" name="password" required>
+                        <div id="signupPasswordError" class="error-message"></div>
+                        <div class="password-strength">
+                            <div>Password strength: <span id="strengthText">None</span></div>
+                            <div class="strength-bar">
+                                <div id="strengthBar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <div id="confirmPasswordError" class="error-message"></div>
+                    </div>
+
+                    <button type="submit" class="button primary">Create Account</button>
+                </form>
+            </section>
+
+            <section id="loginSection" class="section">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" name="email" required>
+                        <div id="loginEmailError" class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="password" required>
+                        <div id="loginPasswordError" class="error-message"></div>
+                    </div>
+
+                    <button type="submit" class="button primary">Log In</button>
+                </form>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // DOM Element Selection
+        const signupForm = document.getElementById('signupForm');
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('signupPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const strengthText = document.getElementById('strengthText');
+        const strengthBar = document.getElementById('strengthBar');
+
+        // Password strength checker function
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            const feedback = [];
+
+            if (password.length >= 6) {
+                strength += 25;
+            } else {
+                feedback.push('At least 6 characters');
+            }
+
+            if (/\d/.test(password)) {
+                strength += 25;
+            } else {
+                feedback.push('At least one number');
+            }
+
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                strength += 25;
+            } else {
+                feedback.push('At least one special character');
+            }
+
+            if (/[A-Z]/.test(password)) {
+                strength += 25;
+            } else {
+                feedback.push('At least one uppercase letter');
+            }
+
+            let strengthLabel;
+            if (strength === 0) strengthLabel = 'None';
+            else if (strength <= 25) strengthLabel = 'Weak';
+            else if (strength <= 50) strengthLabel = 'Fair';
+            else if (strength <= 75) strengthLabel = 'Good';
+            else strengthLabel = 'Strong';
+
+            return { strength, strengthLabel, feedback };
+        }
+
+        // Real-time password strength update
+        passwordInput.addEventListener('input', function() {
+            const result = checkPasswordStrength(this.value);
+            strengthText.textContent = result.strengthLabel;
+            strengthBar.style.width = `${result.strength}%`;
+            
+            if (result.strength > 75) {
+                strengthBar.style.backgroundColor = '#4CAF50'; // Strong
+            } else if (result.strength > 50) {
+                strengthBar.style.backgroundColor = '#FFA500'; // Good
+            } else if (result.strength > 25) {
+                strengthBar.style.backgroundColor = '#FF6347'; // Fair
+            } else {
+                strengthBar.style.backgroundColor = '#DC3545'; // Weak
+            }
+            
+            if (confirmPasswordInput.value) {
+                checkPasswordMatch();
+            }
+        });
+
+        // Real-time password match checking
+        function checkPasswordMatch() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const messageDiv = document.getElementById('confirmPasswordError');
+            
+            if (confirmPassword) {
+                if (password === confirmPassword) {
+                    messageDiv.textContent = 'Passwords match';
+                    messageDiv.className = 'password-match';
+                } else {
+                    messageDiv.textContent = 'Passwords do not match';
+                    messageDiv.className = 'password-mismatch';
+                }
+            } else {
+                messageDiv.textContent = '';
+            }
+        }
+
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+        // Handle signup form submission
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            
+            const firstName = document.getElementById('firstName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            // Form validation
+            let hasError = false;
+            if (!firstName) {
+                document.getElementById('firstNameError').textContent = 'First name is required';
+                hasError = true;
+            }
+            if (!email) {
+                document.getElementById('signupEmailError').textContent = 'Email is required';
+                hasError = true;
+            }
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+                document.getElementById('confirmPasswordError').className = 'error-message';
+                hasError = true;
+            }
+            
+            const passwordCheck = checkPasswordStrength(password);
+            if (passwordCheck.feedback.length > 0) {
+                document.getElementById('signupPasswordError').textContent = 
+                    'Password does not meet requirements: ' + passwordCheck.feedback.join(', ');
+                hasError = true;
+            }
+            
+            if (hasError) return;
+
+            // Submit signup form to server
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ firstName, email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Signup failed');
+                }
+
+                window.location.href = '/protected/dashboard.html';
+            } catch (error) {
+                document.getElementById('signupEmailError').textContent = error.message;
+            }
+        });
+
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Login failed');
+                }
+
+                window.location.href = data.redirectUrl || '/protected/dashboard.html';
+            } catch (error) {
+                document.getElementById('loginEmailError').textContent = error.message;
+            }
+        });
+
+        // Handle logout functionality
+        async function logout() {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    window.location.href = '/';  // Redirect to home page after logout
+                } else {
+                    console.error('Logout failed');
+                }
+            } catch (error) {
+                console.error('Error during logout:', error);
+            }
+        }
+
+        // Check authentication status on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/api/check-auth');
+                const data = await response.json();
+                
+                if (data.isLoggedIn) {
+                    // Update UI for logged-in state if needed
+                    console.log('User is logged in:', data.firstName);
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        });
+    </script>
+</body>
+</html>

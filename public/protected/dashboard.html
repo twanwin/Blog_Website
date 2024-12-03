@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Health & Wellness Blog</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Standard header with navigation -->
+        <header class="header">
+            <a href="/" class="site-title">Health & Wellness Blog</a>
+            <nav class="nav-links">
+                <a href="/about.html">About</a>
+                <a href="/contact.html">Contact</a>
+                <a href="/privacy.html">Privacy Policy</a>
+            </nav>
+            <div class="nav-buttons">
+                <a href="javascript:void(0)" onclick="logout()" class="button secondary">Logout</a>
+            </div>
+        </header>
+
+        <!-- Welcome and quick actions section -->
+        <div class="content-card dashboard-welcome">
+            <div class="welcome-header">
+                <div>
+                    <h1>Welcome to your Dashboard</h1>
+                    <p id="specialistName"></p>
+                </div>
+                <a href="/protected/create-post.html" class="button primary">Create New Post</a>
+            </div>
+
+            <!-- Quick statistics about their contributions -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalPosts">0</span>
+                    <span class="stat-label">Total Posts</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalViews">0</span>
+                    <span class="stat-label">Total Views</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Posts management section -->
+        <main class="content-card">
+            <div class="posts-header">
+                <h2>Your Posts</h2>
+                <div class="posts-filter">
+                    <input 
+                        type="text" 
+                        id="searchPosts" 
+                        placeholder="Search your posts..."
+                        onkeyup="filterPosts()"
+                    >
+                </div>
+            </div>
+
+            <!-- Posts list container -->
+            <div id="userPosts" class="dashboard-posts">
+                <div class="loading">Loading your posts...</div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Load user information and posts when the page loads
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // First, check if user is logged in
+                const authResponse = await fetch('/api/check-auth');
+                const authData = await authResponse.json();
+                
+                if (!authData.isLoggedIn) {
+                    window.location.href = '/auth.html';
+                    return;
+                }
+
+                // Display specialist name
+                document.getElementById('specialistName').textContent = 
+                    `Welcome back, ${authData.firstName}`;
+
+                // Fetch and display posts
+                const postsResponse = await fetch('/api/posts');
+                const posts = await postsResponse.json();
+                
+                displayPosts(posts);
+                updateStats(posts);
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                document.getElementById('userPosts').innerHTML = 
+                    '<p class="error-message">Error loading your posts. Please try again later.</p>';
+            }
+        });
+
+        // Function to display posts in the dashboard
+        function displayPosts(posts) {
+            const postsContainer = document.getElementById('userPosts');
+            
+            if (posts.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="no-posts">
+                        <p>You haven't created any posts yet.</p>
+                        <a href="/protected/create-post.html" class="button primary">Create Your First Post</a>
+                    </div>
+                `;
+                return;
+            }
+
+            postsContainer.innerHTML = posts.map(post => `
+                <div class="dashboard-post-card">
+                    <div class="post-info">
+                        <h3>${post.title}</h3>
+                        <p class="post-date">
+                            Posted on ${new Date(post.createdAt).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}
+                        </p>
+                    </div>
+                    <div class="post-actions">
+                        <a href="/protected/edit-post.html?id=${post._id}" 
+                           class="button secondary">Edit</a>
+                        <button onclick="deletePost('${post._id}')" 
+                                class="button secondary delete-button">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Function to update dashboard statistics
+        function updateStats(posts) {
+            document.getElementById('totalPosts').textContent = posts.length;
+            // You can add more statistics here later
+            document.getElementById('totalViews').textContent = '0';
+        }
+
+        // Function to handle post deletion
+        async function deletePost(postId) {
+            if (!confirm('Are you sure you want to delete this post?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/posts/${postId}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to delete post');
+                }
+
+                // Refresh the posts display
+                const postsResponse = await fetch('/api/posts');
+                const posts = await postsResponse.json();
+                displayPosts(posts);
+                updateStats(posts);
+            } catch (error) {
+                console.error('Error deleting post:', error);
+                alert('Error deleting post. Please try again.');
+            }
+        }
+
+        // Function to handle post search/filtering
+        function filterPosts() {
+            const searchText = document.getElementById('searchPosts').value.toLowerCase();
+            const postCards = document.querySelectorAll('.dashboard-post-card');
+
+            postCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                if (title.includes(searchText)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Handle logout
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.href = '/auth.html';
+            } catch (error) {
+                console.error('Error logging out:', error);
+                alert('Error logging out. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

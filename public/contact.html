@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Health & Wellness Blog</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="site-title">Health & Wellness Blog</a>
+
+            <nav class="nav-links">
+                <a href="/about.html">About</a>
+                <a href="/contact.html">Contact</a>
+                <a href="/faq.html">FAQ</a>
+                <a href="/privacy.html">Privacy Policy</a>
+            </nav>
+
+            <div class="nav-buttons">
+                <a href="/auth.html" class="button secondary">Login</a>
+                <a href="/auth.html" class="button primary">Sign Up</a>
+            </div>
+        </header>
+
+        <div class="content-card" role="main">
+            <h1>Contact Us</h1>
+
+            <p>Have questions about your wellness journey? Our specialists are here to help you achieve your health and fitness goals.</p>
+
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="topic">What's your question about?</label>
+                    <select id="topic" name="topic" required>
+                        <option value="">Select a topic</option>
+                        <option value="fitness">Fitness Training (Thuan)</option>
+                        <option value="nutrition">Nutrition & Diet (Gharam)</option>
+                        <option value="mobility">Mobility & Movement (Ashley)</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+                </div>
+
+                <button type="submit" class="button primary">Send Message</button>
+            </form>
+
+            <section class="specialist-info">
+                <h2>Our Specialists</h2>
+
+                <div class="expert-profile">
+                    <h3>Fitness Training - Thuan</h3>
+                    <p>Expert guidance on workout programs, proper form, and strength training.</p>
+                </div>
+
+                <div class="expert-profile">
+                    <h3>Nutrition & Diet - Gharam</h3>
+                    <p>Professional advice on nutrition, meal planning, and sustainable eating habits.</p>
+                </div>
+
+                <div class="expert-profile">
+                    <h3>Mobility & Movement - Ashley</h3>
+                    <p>Specialized knowledge in flexibility, injury prevention, and movement patterns.</p>
+                </div>
+            </section>
+
+            <div class="disclaimer">
+                <strong>Important Note:</strong> While we aim to respond to all inquiries within 48 hours, please note that our responses are for informational purposes only and should not replace professional medical advice.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

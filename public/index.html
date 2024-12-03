@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health & Wellness Blog</title>
+    <!-- Link to our shared stylesheet for consistent styling -->
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Main container to center content and maintain max-width -->
+    <div class="container">
+        <!-- Header section with navigation and buttons -->
+        <header class="header">
+            <a href="/" class="site-title">Health & Wellness Blog</a>
+            <!-- Navigation links -->
+            <nav class="nav-links">
+                <a href="/about.html">About</a>
+                <a href="/contact.html">Contact</a>
+                <a href="/faq.html">FAQ</a>
+                <a href="/privacy.html">Privacy Policy</a>
+            </nav>
+            <!-- Authentication buttons -->
+            <div class="nav-buttons">
+                <a href="/auth.html" class="button secondary">Login</a>
+                <a href="/auth.html" class="button primary">Sign Up</a>
+            </div>
+        </header>
+
+        <!-- Welcome section with main heading and description -->
+        <div class="welcome-section">
+            <h1>Welcome to Our Blog</h1>
+            <p>Discover expert advice on fitness, nutrition, and mobility from our team of specialists. Join us to learn more about living a healthier, more balanced life.</p>
+        </div>
+
+        <!-- Container for dynamically loaded blog posts -->
+        <div id="publicPosts" class="posts-container">
+            <div class="no-posts">Loading posts...</div>
+        </div>
+    </div>
+
+    <!-- Script for fetching and displaying blog posts -->
+    <script>
+        // Wait for the DOM to be fully loaded before executing
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Fetch blog posts from the server API
+                const response = await fetch('/api/public-posts');
+                const posts = await response.json();
+                
+                // Get reference to the posts container
+                const postsContainer = document.getElementById('publicPosts');
+                // Clear the loading message
+                postsContainer.innerHTML = '';
+                
+                // Loop through each post and create a card for it
+                posts.forEach(post => {
+                    // Create a link element that wraps the entire post card
+                    const postElement = document.createElement('a');
+                    postElement.href = `/post.html?id=${post._id}`;
+                    postElement.className = 'post-card';
+                    
+                    // Format the date for better readability
+                    const date = new Date(post.createdAt);
+                    const formattedDate = date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    
+                    // Set the HTML content for the post card
+                    postElement.innerHTML = `
+                        <h2>${post.title}</h2>
+                        <p>${post.content.substring(0, 200)}...</p>
+                        <p class="post-date">Posted on ${formattedDate}</p>
+                    `;
+                    
+                    // Add the post card to the container
+                    postsContainer.appendChild(postElement);
+                });
+            } catch (error) {
+                // Handle any errors that occur during post loading
+                console.error('Error fetching posts:', error);
+                document.getElementById('publicPosts').innerHTML = 
+                    '<p class="no-posts">Error loading posts. Please try again later.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

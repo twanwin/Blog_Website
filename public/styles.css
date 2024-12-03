@@ -1,0 +1,515 @@
+/* Base styles for consistent formatting */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Basic page layout and typography */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #F5F5F5;
+  color: #333333;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Container for centered content with maximum width */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Header and navigation styles */
+.header {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333333;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333333;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: #2563EB;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Button styles used throughout the site */
+.button {
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+.primary {
+  background-color: #2563EB;
+  color: white;
+}
+
+.secondary {
+  background-color: #E5E7EB;
+  color: #333333;
+}
+
+/* Welcome section styles for homepage */
+.welcome-section {
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.welcome-section h1 {
+  margin-bottom: 16px;
+  color: #333333;
+}
+
+.welcome-section p {
+  color: #666666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Blog post listings styles */
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.post-card {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.2s;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+}
+
+.post-card h2 {
+  color: #333333;
+  margin-bottom: 12px;
+  font-size: 24px;
+  border: none;
+  padding: 0;
+  margin-top: 0;
+}
+
+.post-card h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.post-card h2 a:hover {
+  color: #2563EB;
+}
+
+.post-card p {
+  color: #666666;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.post-date {
+  color: #666666;
+  font-size: 14px;
+  margin-top: 15px;
+  font-style: italic;
+}
+
+/* Content card styles for general page layout */
+.content-card {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.content-card h1 {
+  margin-bottom: 30px;
+  color: #333333;
+}
+
+.content-card h2 {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  color: #333333;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.content-card h2:first-of-type {
+  margin-top: 0;
+}
+
+.content-card p {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* Dashboard specific styles */
+.dashboard-welcome {
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.dashboard-welcome h1 {
+  font-size: 28px;
+  color: #1F2937;
+  margin-bottom: 16px;
+}
+
+.dashboard-stats {
+  display: flex;
+  gap: 20px;
+  margin-top: 24px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: #F3F4F6;
+  padding: 16px 24px;
+  border-radius: 6px;
+  flex: 1;
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1F2937;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  color: #6B7280;
+  font-size: 14px;
+}
+
+/* Enhanced dashboard posts list styles */
+.dashboard-posts {
+  margin-top: 30px;
+}
+
+.dashboard-posts h2 {
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: #1F2937;
+}
+
+.search-posts {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.search-posts:focus {
+  outline: none;
+  border-color: #2563EB;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.post-item {
+  padding: 24px 0;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.post-item:last-child {
+  border-bottom: none;
+}
+
+.post-item h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #1F2937;
+}
+
+.post-item .post-date {
+  color: #6B7280;
+  font-size: 14px;
+  margin: 8px 0 16px 0;
+  font-style: italic;
+}
+
+.post-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.action-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  color: #4B5563;
+  transition: all 0.2s;
+}
+
+.action-button:hover {
+  background: #E5E7EB;
+}
+
+.action-button.delete {
+  color: #DC2626;
+  background: #FEF2F2;
+  border-color: #FEE2E2;
+}
+
+.action-button.delete:hover {
+  background: #FEE2E2;
+}
+
+/* FAQ page specific styles */
+.faq-section {
+  margin-bottom: 40px;
+}
+
+.faq-section:last-child {
+  margin-bottom: 0;
+}
+
+.faq-item {
+  margin-bottom: 25px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.faq-item h3 {
+  color: #333333;
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.faq-item p {
+  color: #4B5563;
+  line-height: 1.6;
+}
+
+.faq-footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #E5E7EB;
+  text-align: center;
+}
+
+.faq-footer a {
+  color: #2563EB;
+  text-decoration: none;
+}
+
+.faq-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Authentication form styles */
+.form-section {
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.validation-rules {
+  background-color: #F3F4F6;
+  padding: 15px 20px;
+  border-radius: 6px;
+  margin-bottom: 25px;
+}
+
+.validation-rules ul {
+  list-style-type: none;
+  margin-top: 10px;
+}
+
+.validation-rules li {
+  margin-bottom: 8px;
+  color: #4B5563;
+  position: relative;
+  padding-left: 20px;
+}
+
+.validation-rules li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #2563EB;
+}
+
+.password-strength {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #4B5563;
+}
+
+.strength-bar {
+  height: 4px;
+  background-color: #E5E7EB;
+  border-radius: 2px;
+  margin-top: 6px;
+}
+
+#loginSection {
+  margin-top: 40px;
+  padding-top: 20px;
+}
+
+/* Form styles */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #E5E7EB;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #2563EB;
+}
+
+.form-group textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+/* Contact form specific styles */
+.contact-form {
+  margin-bottom: 40px;
+}
+
+.contact-form button {
+  margin-top: 20px;
+}
+
+/* Specialist section styles */
+.specialist-info {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #E5E7EB;
+}
+
+.specialist-info h2 {
+  margin-bottom: 30px;
+  color: #333333;
+}
+
+/* Expert profile styles */
+.expert-profile {
+  padding: 20px 0;
+  border-top: 1px solid #E5E7EB;
+}
+
+.expert-profile:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.expert-profile h3 {
+  margin: 0 0 5px 0;
+  color: #333333;
+}
+
+.expert-profile .title {
+  color: #2563EB;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+/* Utility classes */
+.error-message {
+  color: #DC2626;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.disclaimer {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #FEF3F2;
+  border-radius: 4px;
+  color: #991B1B;
+  font-size: 0.9em;
+}
+
+/* Loading and error states */
+.no-posts {
+  text-align: center;
+  padding: 40px;
+  color: #666666;
+}

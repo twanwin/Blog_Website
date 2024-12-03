@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Post - Health & Wellness Blog</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Standard header with navigation -->
+        <header class="header">
+            <a href="/" class="site-title">Health & Wellness Blog</a>
+            <nav class="nav-links">
+                <a href="/about.html">About</a>
+                <a href="/contact.html">Contact</a>
+                <a href="/privacy.html">Privacy Policy</a>
+            </nav>
+            <div class="nav-buttons">
+                <a href="javascript:void(0)" onclick="logout()" class="button secondary">Logout</a>
+            </div>
+        </header>
+
+        <!-- Main content area with the post editing form -->
+        <main class="content-card">
+            <div class="post-header">
+                <h1>Edit Blog Post</h1>
+                <div class="header-actions">
+                    <a href="/protected/dashboard.html" class="button secondary">Back to Dashboard</a>
+                    <button onclick="previewPost()" class="button secondary">Preview Changes</button>
+                </div>
+            </div>
+
+            <!-- Post editing form -->
+            <form id="editPostForm" class="post-form">
+                <div class="form-group">
+                    <label for="title">Post Title</label>
+                    <input 
+                        type="text" 
+                        id="title" 
+                        name="title" 
+                        required 
+                        placeholder="Enter post title"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Post Content</label>
+                    <div class="writing-tips">
+                        Remember to:
+                        • Keep your explanations clear and accessible
+                        • Include practical examples and applications
+                        • Consider different experience levels
+                        • Break down complex concepts into digestible parts
+                    </div>
+                    <textarea 
+                        id="content" 
+                        name="content" 
+                        required 
+                        rows="15"
+                        placeholder="Write your post content here..."
+                    ></textarea>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="button primary">Save Changes</button>
+                    <button type="button" onclick="cancelEdit()" class="button secondary">Cancel</button>
+                </div>
+            </form>
+
+            <!-- Preview modal (hidden by default) -->
+            <div id="previewModal" class="preview-modal" style="display: none;">
+                <div class="preview-content">
+                    <h2>Post Preview</h2>
+                    <div id="previewArea"></div>
+                    <button onclick="closePreview()" class="button secondary">Close Preview</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let originalPost = {}; // Store the original post data for comparison
+
+        // Load the existing post when the page loads
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Get the post ID from the URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const postId = urlParams.get('id');
+
+                if (!postId) {
+                    throw new Error('No post ID provided');
+                }
+
+                // Fetch the post data
+                const response = await fetch(`/api/posts/${postId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to load post');
+                }
+
+                const post = await response.json();
+                originalPost = post; // Save the original post data
+
+                // Fill the form with the post data
+                document.getElementById('title').value = post.title;
+                document.getElementById('content').value = post.content;
+
+            } catch (error) {
+                console.error('Error loading post:', error);
+                alert('Error loading post. Redirecting to dashboard...');
+                window.location.href = '/protected/dashboard.html';
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('editPostForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const postId = urlParams.get('id');
+
+                const formData = {
+                    title: document.getElementById('title').value,
+                    content: document.getElementById('content').value
+                };
+
+                // Only submit if changes were made
+                if (formData.title === originalPost.title && 
+                    formData.content === originalPost.content) {
+                    alert('No changes were made to the post.');
+                    return;
+                }
+
+                const response = await fetch(`/api/posts/${postId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update post');
+                }
+
+                alert('Post updated successfully!');
+                window.location.href = '/protected/dashboard.html';
+            } catch (error) {
+                console.error('Error updating post:', error);
+                alert('Error updating post. Please try again.');
+            }
+        });
+
+        // Preview functionality
+        function previewPost() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            
+            const previewArea = document.getElementById('previewArea');
+            previewArea.innerHTML = `
+                <h1>${title}</h1>
+                <div class="post-content">${content}</div>
+            `;
+            
+            document.getElementById('previewModal').style.display = 'block';
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        // Handle canceling edits
+        function cancelEdit() {
+            if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+                window.location.href = '/protected/dashboard.html';
+            }
+        }
+
+        // Handle logout
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.href = '/auth.html';
+            } catch (error) {
+                console.error('Error logging out:', error);
+                alert('Error logging out. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

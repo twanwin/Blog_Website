@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Post - Health & Wellness Blog</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Standard header section with navigation -->
+        <header class="header">
+            <a href="/" class="site-title">Health & Wellness Blog</a>
+            <nav class="nav-links">
+                <a href="/about.html">About</a>
+                <a href="/contact.html">Contact</a>
+                <a href="/privacy.html">Privacy Policy</a>
+            </nav>
+            <div class="nav-buttons">
+                <a href="javascript:void(0)" onclick="logout()" class="button secondary">Logout</a>
+            </div>
+        </header>
+
+        <!-- Main content area with the post creation form -->
+        <main class="content-card">
+            <div class="post-header">
+                <h1>Create New Blog Post</h1>
+                <a href="/protected/dashboard.html" class="button secondary">Back to Dashboard</a>
+            </div>
+
+            <!-- Post creation form with guidance for content -->
+            <form id="createPostForm" class="post-form">
+                <div class="form-group">
+                    <label for="title">Post Title</label>
+                    <input 
+                        type="text" 
+                        id="title" 
+                        name="title" 
+                        required 
+                        placeholder="Enter a clear, engaging title for your post"
+                    >
+                    <div class="input-help">
+                        Good titles are specific and tell readers what they'll learn
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Post Content</label>
+                    <div class="writing-tips">
+                        Tips for writing effective health and wellness content:
+                        • Break information into clear sections
+                        • Use examples to illustrate key points
+                        • Include actionable advice readers can implement
+                        • Consider different fitness levels and abilities
+                    </div>
+                    <textarea 
+                        id="content" 
+                        name="content" 
+                        required 
+                        rows="15"
+                        placeholder="Write your post content here. Start with an engaging introduction that explains what readers will learn."
+                    ></textarea>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="button primary">Publish Post</button>
+                    <button type="button" onclick="saveDraft()" class="button secondary">Save Draft</button>
+                </div>
+            </form>
+
+            <!-- Helpful references section for content creators -->
+            <div class="content-guidelines">
+                <h2>Content Guidelines</h2>
+                <div class="guideline-section">
+                    <h3>Writing Style</h3>
+                    <p>Keep your writing clear and accessible. Explain technical terms when you use them, and focus on practical, actionable advice.</p>
+                </div>
+                <div class="guideline-section">
+                    <h3>Content Structure</h3>
+                    <p>Include an introduction, clear sections with headings, and a conclusion or summary of key points.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Handle form submission
+        document.getElementById('createPostForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const formData = {
+                    title: document.getElementById('title').value,
+                    content: document.getElementById('content').value
+                };
+
+                const response = await fetch('/api/posts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to create post');
+                }
+
+                const result = await response.json();
+                alert('Post created successfully!');
+                window.location.href = '/protected/dashboard.html';
+            } catch (error) {
+                console.error('Error creating post:', error);
+                alert('Error creating post. Please try again.');
+            }
+        });
+
+        // Handle logout
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.href = '/auth.html';
+            } catch (error) {
+                console.error('Error logging out:', error);
+                alert('Error logging out. Please try again.');
+            }
+        }
+
+        // Function to save post as draft (you can implement this later)
+        function saveDraft() {
+            alert('Draft saving functionality will be implemented soon!');
+        }
+    </script>
+</body>
+</html>
