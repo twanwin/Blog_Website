@@ -154,6 +154,4 @@ When contributing to this project:
 3. Update README documentation as needed
 4. Test thoroughly before submitting changes
 
-## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
